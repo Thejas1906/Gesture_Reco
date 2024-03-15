@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Development by gesture recognition using computer vision</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #333;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .title {
+            text-align: center;
+            font-size: 2em;
+            margin: 0;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Added text shadow */
+        }
+        .games_container {
+            width: 100%; /* Adjusted width */
+            padding: 0 30px 30px 30px; /* Adjusted padding */
+            text-align: left;
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+        .section {
+            margin-bottom: 20px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px; /* Rounded corners */
+            position: relative; /* Required for pseudo-element positioning */
+            overflow: hidden; /* Ensure the overlay doesn't overflow */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Added drop shadow */
+        }
+        .hill_climb {
+            background-image: url("{{url_for('static',filename='hill_climb_racing_background.png')}}");
+        }
+        .subway_surfers {
+            background-image: url("{{url_for('static',filename='subway_surfers_background.png')}}");
+        }
+        .miscellaneous {
+            background-image: url('miscellaneous_background.png');
+        }
+        .section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3); /* Darker overlay color */
+            z-index: 0; /* Place the overlay behind other content */
+            border-radius: 10px; /* Match border-radius of section */
+        }
+        .section_content {
+            position: relative; /* Ensure content appears above overlay */
+            z-index: 1; /* Place content above overlay */
+            padding: 20px;
+        }
+        .section h2 {
+            margin-bottom: 8px;
+            font-size: 1.5em;
+            color: #fff; /* White text color */
+        }
+        .section h3 {
+            margin-top: 0;
+            font-size: 1em;
+            color: #efefef; /* Light grey text color */
+        }
+        .images {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none; /* for Firefox */
+            -ms-overflow-style: none; /* for IE/Edge */
+        }
+        .images::-webkit-scrollbar {
+            display: none; /* for Chrome, Safari, and Opera */
+        }
+        .image_container {
+            background-color: rgba(0, 0, 0, 0.6); /* Dark background color */
+            padding: 10px;
+            border-radius: 10px;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .image {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .image img {
+            max-width: 150px; /* 100 * 1.5 */
+            max-height: 150px; /* 100 * 1.5 */
+            border-radius: 5px;
+        }
+        .description {
+            font-size: 1.3em;
+            color: #ffffff; /* Light grey text color */
+        }
+        .start_button_container {
+            position: relative;
+            bottom: 40px; /* Adjusted position */
+            /* left: 50%; Center horizontally */
+            /* transform: translateX(-50%); Move back by half of its width */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center items horizontally */
+            justify-content: center; /* Center items vertically */
+        }
+
+        .start_button {
+            padding: 30px 60px; /* Adjusted padding */
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px; /* Rounded corners */
+            cursor: pointer;
+            font-size: 1.8em; /* Adjusted font size */
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.6); /* Added drop shadow */
+            margin-bottom: 0; /* Adjusted margin */
+        }
+        .start_button_description {
+            font-size: 1em;
+            color: #ccc; /* Light grey text color */
+            text-align: center; /* Center text */
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h3>Game Development by gesture recognition using computer vision</h2>
+    </div>
+    <div class="games_container">
+        <div class="section hill_climb">
+            <div class="section_content">
+                <h2>Hill Climb Racing:</h2>
+                <h3>Instructions:</h3>
+                <div class="images">
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Gas.png')}}" alt="Gas">
+                        </div>
+                        <div class="description">Gas</div>
+                    </div>
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Brake.png')}}" alt="Brake">
+                        </div>
+                        <div class="description">Brake</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section subway_surfers">
+            <div class="section_content">
+                <h2>Subway Surfers:</h2>
+                <h3>Instructions:</h3>
+                <div class="images">
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Right.png')}}" alt="Right">
+                        </div>
+                        <div class="description">Right</div>
+                    </div>
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Left.png')}}" alt="Left">
+                        </div>
+                        <div class="description">Left</div>
+                    </div>
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Jump.png')}}" alt="Jump">
+                        </div>
+                        <div class="description">Jump</div>
+                    </div>
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Roll.png')}}" alt="Roll">
+                        </div>
+                        <div class="description">Roll</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section miscellaneous">
+            <div class="section_content">
+                <h2>Miscellaneous:</h2>
+                <h3>Instructions:</h3>
+                <div class="images">
+                    <div class="image_container">
+                        <div class="image">
+                            <img src="{{url_for('static',filename='Stand-By.png')}}" alt="Stand By">
+                        </div>
+                        <div class="description">Stand By</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="start_button_container">
+        <button class="start_button" onclick="run_program()">Start</button>
+        <div class="start_button_description">
+            <p>Read instructions <br> before starting.</p>
+        </div>
+    </div>
+
+    <script>
+        function run_program(){
+            window.location.href="/run_program"
+        }
+    </script>
+</body>
+</html>
