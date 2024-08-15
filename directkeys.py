@@ -3,6 +3,7 @@ import time
 
 SendInput = ctypes.windll.user32.SendInput
 
+# ASCII code for each key
 up_pressed=0x48
 down_pressed=0x50
 right_pressed=0x4D
