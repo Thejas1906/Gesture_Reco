@@ -1,5 +1,5 @@
 # Cache
-_pycache/
+__pycache__/
 
 # Files
 # challenge.py
